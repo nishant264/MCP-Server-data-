@@ -52,19 +52,16 @@
 from agno.agent import Agent
 
 agent = Agent(
-    model=Gemini(id="gemini-1.5-flash"),  # The AI brain
+    model=Gemini(id="gemini-2.0-flash"),  # The AI brain
     tools=[mcp_tools],                        # What tools it can use
     instructions=[...],                       # How to behave
     markdown=True,                            # Format answers nicely
-    
-                     # Show what it's doing
 )
 ```
 
 **Key features we used:**
 - `tools=[]` — List of tools the agent can call
 - `instructions=[]` — Personality and rules for the AI
-- `show_tool_calls=True` — Shows you what the AI is doing behind the scenes
 - `agent.arun(message)` — Runs the agent with your question
 
 ---
@@ -80,7 +77,7 @@ agent = Agent(
 ```python
 from agno.models.google import Gemini
 
-model = Gemini(model="gemini-1.5-flash")
+model = Gemini(id="gemini-2.0-flash")
 ```
 
 **Why Gemini instead of OpenAI?**
@@ -258,6 +255,7 @@ To install: `pip install -r requirements.txt`
 | **SQLite** | A database that's just a file on your computer |
 | **MCP Server** | A program that provides tools to AI via MCP |
 | **Tool** | A function the AI can call (like run_sql_query) |
+| **show_tool_calls** | Displays what tools the AI is calling in real-time |
 | **StdioServerParameters** | Settings for connecting to an MCP server |
 | **Environment Variable** | A secret value stored in the system (like API keys) |
 | **Security Guardrail** | Code that blocks dangerous actions |
@@ -338,7 +336,7 @@ from agno.agent import Agent
 from agno.models.google import Gemini
 
 agent = Agent(
-    model=Gemini(id="gemini-1.5-flash"),
+    model=Gemini(id="gemini-2.0-flash"),
     tools=[...],
     instructions=["How the AI should behave"],
     markdown=True,
