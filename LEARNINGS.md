@@ -255,7 +255,6 @@ To install: `pip install -r requirements.txt`
 | **SQLite** | A database that's just a file on your computer |
 | **MCP Server** | A program that provides tools to AI via MCP |
 | **Tool** | A function the AI can call (like run_sql_query) |
-| **show_tool_calls** | Displays what tools the AI is calling in real-time |
 | **StdioServerParameters** | Settings for connecting to an MCP server |
 | **Environment Variable** | A secret value stored in the system (like API keys) |
 | **Security Guardrail** | Code that blocks dangerous actions |
