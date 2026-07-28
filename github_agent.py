@@ -4,6 +4,7 @@ import io
 import json
 import os
 import sqlite3
+import sys
 import streamlit as st
 from pathlib import Path
 from agno.agent import Agent
@@ -15,6 +16,11 @@ from agno.models.google import Gemini
 # This ensures we can find db_mcp_server.py no matter where we run from
 PROJECT_DIR = Path(__file__).parent
 DB_PATH = str(PROJECT_DIR / "store.db")
+
+# Auto-seed the database if it doesn't exist (needed for Streamlit Cloud)
+if not os.path.exists(DB_PATH):
+    import subprocess
+    subprocess.run([sys.executable, str(PROJECT_DIR / "seed_db.py")], check=True)
 
 
 def fetch_sql_data(sql: str):
