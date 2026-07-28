@@ -10,7 +10,7 @@ from pathlib import Path
 from agno.agent import Agent
 from agno.tools.mcp import MCPTools
 from mcp import StdioServerParameters
-from agno.models.google import Gemini
+from agno.models.groq import Groq
 
 # Get the folder where this script is located
 # This ensures we can find db_mcp_server.py no matter where we run from
@@ -32,9 +32,9 @@ def fetch_sql_data(sql: str):
     conn.close()
     return cols, rows
 
-st.set_page_config(page_title="✨ Gemini + MCP Playground", page_icon="✨", layout="wide")
+st.set_page_config(page_title="✨ Groq + MCP Playground", page_icon="✨", layout="wide")
 
-st.markdown("<h1 class='main-header'>✨ Gemini + MCP Playground</h1>", unsafe_allow_html=True)
+st.markdown("<h1 class='main-header'>✨ Groq + MCP Playground</h1>", unsafe_allow_html=True)
 st.markdown("Chat with an AI agent that uses the Model Context Protocol to interact with data and tools")
 
 with st.sidebar:
@@ -48,7 +48,7 @@ with st.sidebar:
     st.markdown("### ⚙️ How It Works")
     st.markdown("""
     1. **You** ask a question in plain English
-    2. **Gemini** (Google's AI) understands your request
+    2. **Groq** (via Llama 3.3 70B) understands your request
     3. The **MCP server** translates it into database queries
     4. Results come back formatted as readable text
     
@@ -59,8 +59,8 @@ with st.sidebar:
 query = st.text_area("Your Query", placeholder="e.g., Show me all products sorted by price")
 
 async def run_agent(message):
-    if not os.getenv("GOOGLE_API_KEY"):
-        return "Error: Gemini API key not configured. Please contact the site owner."
+    if not os.getenv("GROQ_API_KEY"):
+        return "Error: Groq API key not configured. Please contact the site owner."
     
     try:
         # Connect to our custom MCP server (db_mcp_server.py)
@@ -73,9 +73,9 @@ async def run_agent(message):
         )
         
         async with MCPTools(server_params=server_params) as mcp_tools:
-            # Create the AI agent with Gemini and our database tools
+            # Create the AI agent with Groq and our database tools
             agent = Agent(
-                model=Gemini(id="gemini-2.0-flash"),
+                model=Groq(id="llama-3.3-70b-versatile"),
                 tools=[mcp_tools],
                 instructions=[
                     "You are a helpful data assistant for a small e-commerce store.",
@@ -105,7 +105,7 @@ if st.button("🚀 Run Query", type="primary", use_container_width=True):
     if not query:
         st.error("Please enter a query")
     else:
-        with st.spinner("🧠 Gemini is thinking... calling database tools..."):
+        with st.spinner("🧠 Groq is thinking... calling database tools..."):
             result = asyncio.run(run_agent(query))
         
         st.markdown("### Results")
@@ -167,7 +167,7 @@ if st.button("🚀 Run Query", type="primary", use_container_width=True):
 if 'result' not in locals():
     st.markdown(
         """<div class='info-box'>
-        <h4>🚀 Welcome to Gemini + MCP Playground!</h4>
+        <h4>🚀 Welcome to Groq + MCP Playground!</h4>
         <p>This app showcases how <strong>AI agents</strong> use the <strong>Model Context Protocol (MCP)</strong> 
         to securely interact with data.</p>
         
@@ -179,7 +179,7 @@ if 'result' not in locals():
         
         <h4>🧠 What's happening under the hood:</h4>
         <ul>
-            <li><strong>Gemini</strong> — Google's AI model that understands your question</li>
+            <li><strong>Groq</strong> — Llama 3.3 70B running on Groq's ultra-fast inference</li>
             <li><strong>Agno</strong> — The library that manages the AI agent</li>
             <li><strong>MCP (Model Context Protocol)</strong> — The standard way AI talks to tools</li>
             <li><strong>SQLite</strong> — The local database with sample e-commerce data</li>
