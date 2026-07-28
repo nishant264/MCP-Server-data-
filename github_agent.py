@@ -38,14 +38,6 @@ st.markdown("<h1 class='main-header'>✨ Gemini + MCP Playground</h1>", unsafe_a
 st.markdown("Chat with an AI agent that uses the Model Context Protocol to interact with data and tools")
 
 with st.sidebar:
-    st.header("🔑 Authentication")
-    
-    api_key = st.text_input("Gemini API Key", type="password",
-                          help="Get your free API key from aistudio.google.com")
-    if api_key:
-        os.environ["GOOGLE_API_KEY"] = api_key
-    
-    st.markdown("---")
     st.markdown("### Try Asking")
     st.markdown("- Show me all products with price above $50")
     st.markdown("- Which customers have placed the most orders?")
@@ -68,7 +60,7 @@ query = st.text_area("Your Query", placeholder="e.g., Show me all products sorte
 
 async def run_agent(message):
     if not os.getenv("GOOGLE_API_KEY"):
-        return "Error: Please enter your Gemini API key in the sidebar"
+        return "Error: Gemini API key not configured. Please contact the site owner."
     
     try:
         # Connect to our custom MCP server (db_mcp_server.py)
@@ -110,9 +102,7 @@ async def run_agent(message):
         return f"Error: {str(e)}"
 
 if st.button("🚀 Run Query", type="primary", use_container_width=True):
-    if not api_key:
-        st.error("Please enter your Gemini API key in the sidebar")
-    elif not query:
+    if not query:
         st.error("Please enter a query")
     else:
         with st.spinner("🧠 Gemini is thinking... calling database tools..."):
@@ -183,8 +173,6 @@ if 'result' not in locals():
         
         <h4>How to use:</h4>
         <ol>
-            <li>Enter your <strong>Gemini API key</strong> in the sidebar 
-                (get one free at <a href='https://aistudio.google.com/apikey'>aistudio.google.com</a>)</li>
             <li>Type a question about the store data (products, customers, orders)</li>
             <li>Click 'Run Query' and watch the AI work!</li>
         </ol>
